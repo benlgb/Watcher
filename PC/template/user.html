@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>守望者</title>
+    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="../static/css/search.css">
+    <link rel="stylesheet" href="../static/css/user.css">
+</head>
+
+<body>
+	<div class="header">
+		<div class="leaders">
+			<img src="../static/img/logo.png" alt="守望者" class="logo">
+			<ul>
+				<li><a href="index.html">首页</a></li>
+				<li><a href="search.html">搜索</a></li>
+				<li><a href="info.html">通知</a></li>
+				<li class="on"><a href="user.html">管理账号</a></li>
+			</ul>
+			<img src="../static/img/avatar.jpg" alt="" class="avatar">
+		</div>
+	</div>
+	
+	<div class="content" id="content">
+		<div class="query">
+			<div>姓名 <input type="text" id="name"></div>
+			<div>学号 <input type="text" id="schoolId"></div>
+			<div class="select">
+				学院
+				<div class="select-box">
+					<input type="text" id="college">
+					<ul tabindex="0"></ul>
+					<i class="arrow"></i>
+				</div>
+			</div>
+			<div class="select">
+				专业
+				<div class="select-box">
+					<input type="text" id="major">
+					<ul tabindex="0"></ul>
+					<i class="arrow"></i>
+				</div>
+			</div>
+			<div class="select">
+				班级
+				<div class="select-box">
+					<input type="text" id="classname">
+					<ul tabindex="0"></ul>
+					<i class="arrow"></i>
+				</div>
+			</div>
+			<input type="button" class="search-button" value="搜索">
+		</div>
+		<div class="result" id="result">
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+			<div class="people">
+				<div class="photo">
+					<img src="../static/img/avatar.jpg" alt="">
+				</div>
+				<div class="information">
+					<h2>郭小洁</h2>
+					<p>思科信息学院</p>
+					<p>软件工程 1501</p>
+					<p>学号: 20151001234</p>
+					<p>手机：110</p>
+				</div>
+			</div>
+		</div>
+		<div class="notice" id="notice" type="init">
+			<div class="init">请输入条件搜索</div>
+			<div class="loading"><img src="../static/img/Wait.png" alt=""></div>
+			<div class="more" id="more-button">加载更多</div>
+		</div>
+	</div>
+	<script type="text/plain" id="people">
+		<div class="people">
+			<div class="photo">
+				<img src="{{ avatar }}" alt="">
+			</div>
+			<div class="information">
+				<h2>{{ name }}</h2>
+				<p>{{ college }}</p>
+				<p>{{ classname }}</p>
+				<p>学号: {{ schoolId }}</p>
+				<p>手机：{{ phone }}</p>
+			</div>
+		</div>
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+html, body{
+	background-image: none;
+}
+
+.content{
+	width: 900px;
+	padding: 100px 0px 20px;
+	margin: 0px auto;
+}
+
+.content .information td:nth-child(7n + 6){
+	color: #eb3f3f;
+	font-size: 15px;
+}
+
+.content .information{
+	width: 100%;
+	background-color: white;
+	text-align: center;
+	color: #171717;
+	font-size: 0px;
+	padding: 0px 15px;
+	border-width: 2px 18px;
+	border-style: solid;
+	border-color: white;
+	border-collapse: collapse;
+	min-height: 500px;
+	letter-spacing: 1px;
+}
+
+.information td, .information th{
+	border-top: 1px solid #a6a6a6;
+	font-size: 14px;
+	height: 40px;
+	min-width: 70px;
+}
+
+.information th{
+	color: #878787;
+	font-weight: normal;
+	border: none;
+}
+
+.information .fixed-table td{
+	height: auto;
+	border: none;
+}

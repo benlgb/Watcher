@@ -1,0 +1,137 @@
+html, body{
+	background-image: none;
+}
+
+.content{
+	padding-top: 110px;
+	width: 900px;
+	margin: 0px auto;
+}
+
+.content .person{
+	width: 100%;
+	background-color: white;
+	height: 100px;
+	color: #171717;
+}
+
+.person .avatar{
+	width: 100px;
+	height: 100px;
+	float: left;
+}
+
+.person .avatar img{
+	width: 100%;
+	height: 100%;
+}
+
+.person .information{
+	margin-left: 20px;
+	font-size: 13px;
+	float: left;
+}
+
+.person .information h2{
+	font-weight: normal;
+	margin-top: 6px;
+	margin-bottom: 7px;
+}
+
+.person .function{
+	float: right;
+	margin-right: 40px;
+}
+
+.person .function span{
+	display: inline-block;
+	width: 100px;
+	border: 1px solid #171717;
+	height: 32px;
+	line-height: 32px;
+	text-align: center;
+	border-radius: 16px;
+	font-size: 15px;
+	margin: 0px 10px;
+	margin-top: 33px;
+	cursor: pointer;
+}
+
+.person .light{
+	float: right;
+	line-height: 100px;
+	margin-right: 30px;
+}
+
+.person .light i{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 1px solid #a6a6a6;
+	position: relative;
+	top: 3px;
+	margin: 0px 3px;
+}
+
+.person .light i:last-child{
+	margin-left: 40px;
+}
+
+.handle h2, .log h2{
+	font-size: 16px;
+	color: white;
+	letter-spacing: 2px;
+	line-height: 40px;
+}
+
+.handle input[type="text"]{
+	width: 750px;
+	border: none;
+	outline: none;
+	padding: 0px 10px;
+	height: 34px;
+}
+
+.handle input[type="button"]{
+	float: right;
+	border: none;
+	outline: none;
+	height: 34px;
+	width: 110px;
+	background-color: #7bd191;
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.log table{
+	width: 100%;
+	background-color: white;
+	text-align: center;
+	color: #171717;
+	font-size: 0px;
+	padding: 0px 15px;
+	border-width: 2px 18px;
+	border-style: solid;
+	border-color: white;
+	border-collapse: collapse;
+	min-height: 500px;
+}
+
+.log td, .log th{
+	border-top: 1px solid #a6a6a6;
+	font-size: 14px;
+	height: 40px;
+	min-width: 70px;
+}
+
+.log th{
+	color: #878787;
+	font-weight: normal;
+	border: none;
+}
+
+.log .fixed-table td{
+	height: auto;
+}
