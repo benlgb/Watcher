@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=0, maximum-scale=1.0"/>
+	<title>守望者</title>
+	<link rel="stylesheet" href="../static/css/tabs.css">
+	<link rel="stylesheet" href="../static/css/watcher.css">
+	<script src="../static/js/vue.js"></script>
+	<script src="../static/js/jquery-3.1.1.js"></script>
+</head>
+<body>
+	<div class="tabs">
+		<div class="tab self"><a href="index.html">自我成长</a></div>
+		<div class="tab watcher on">守望者</div>
+		<div class="tab phone"><a href="phone.html">心灵的港湾</a></div>
+		<div class="tab me"><a href="me.html">我的</a></div>
+	</div>
+
+	<form class="content" action="watcher.html" method="get" v-on:submit.prevent="onSubmit">
+		<h3>请输入测评对象的信息</h3>
+		<p> 
+			<input class="input" id="name" v-model="name" type="text" name="name" placeholder="姓名" required>
+			<input class="submit input" type="submit" value="确定">
+		</p>
+
+		<transition name="alert">
+			<div class="alert" v-if="alert" v-cloak>
+				<div class="mask"></div>
+				<div class="alert-box">
+					<i class="close" v-on:click="alert = false"></i>
+					<h3>守望者合约</h3>
+					<div class="description">
+						<p>一、提示条款</p>
+						<p>本协议由您与守望者心理危机预警系统共同缔结，是用户注册守望者心理危机预警系统账号并在使用时的通用条款。您在申请注册流程中点击同意本协议之前，请您务必审慎阅读、充分理解各条款内容。<br><br></p>
+						<p>二、协议生效</p>
+						<p>当您按照注册页面提示填写信息、阅读并同意本协议且完成全部注册程序后，即表示您已充分阅读、理解并接受本协议的全部内容，并与守望者心理危机预警平台达成一致，您的注册行为将被认为是对本协议全部条款无保留的接受和遵守。<br><br></p>
+						<p>三、账户说明</p>
+						<p>1、在您完成守望者心理危机预警系统账户注册后，意味着您已获得该账户的使用权。</p>
+						<p>2、用户完成守望者心理危机预警系统注册程序后，将获得守望者心理危机预警系统使用帐号，用户应自行承担帐号及帐号密码的安全保护责任。用户对其帐号下所进行的任何活动负完全的责任。守望者心理危机预警系统无法对非法或未经用户授权使用您帐号及密码的行为作出甄别，因此守望者心理危机预警系统不承担任何责任。在此，用户同意并承诺做到∶当用户的密码或帐号遭到未获授权的使用，或者发生其他任何安全问题时，用户会立即通过后台有效通知到守望者心理危机预警系统。<br><br></p>
+						<p>四、用户需要遵守的规则</p>
+						<p>1、在日常生活中积极关注、关心身边的同学；</p>
+						<p>2、遵守国家关于互联网信息发布的相关法律法规；</p>
+						<p>3、提供客观真实、正确、最新及完整的资料；提供信息时不得出于个人恩怨恶意或恶搞，不得捏造或歪曲事实；</p>
+						<p>4、在提供信息后，积极配合辅导员等的工作；</p>
+						<p>5、对于关注对象的一切信息（自己观察到的、听到的以及在配合老师工作中了解到的），应该保密。<br><br></p>
+						<p>五、守望者心理危机系统应遵守的义务</p>
+						<p>（一）守望者心理危机预警系统将采取合理的安全手段保护用户和被关注对象已存储的个人信息，除下述信息披露条款外，在未得到用户许可之前，守望者心理危机预警系统不会将用户和被关注对象的任何个人信息提供给任何无关的第三方（包括公司或个人）。</p>
+						<p>1、经用户或被关注对象事先同意，向第三方披露；</p>
+						<p>2、根据法律的有关规定，或者行政或司法机构的要求，向第三方或者行政、司法机构披露；</p>
+						<p>3、如用户出现违反中国有关法律、法规或者本网站法律声明、服务协议或相关规则的情况，需要向第三方披露；</p>
+						<p>4、维护本网站的合法权益；</p>
+						<p>5、根据本协议相关规定或者本网站认为必要的其他情况。</p>
+						<p>（二）守望者心理危机预警系统亦不允许任何第三方以任何手段收集、编辑、出售或无偿传播用户的个人信息。</p>
+						<p>（三）在现有技术上维护网络平台的运行、努力提高和改进技术；提供相关的服务。<br><br></p>
+						<p>六、温馨提示</p>
+						<p>自评量表测试结果仅供参考，不代表权威结果，如需进一步专业了解，请自行联系心理咨询中心或者就业指导中心。</p>
+						<p class="radio">
+							<input id="radio" type="radio" value="isSubmit" v-on:click="submit = true">
+							<label for="radio">
+								我已阅读并同意《守望者公约》
+							</label>
+						</p>
+					</div>
+					<div class="toTest">
+						<!-- <a href="">开始测试</a> -->
+						<input v-bind:class="{lock: !submit}" type="submit">
+					</div>
+				</div>
+			</div>
+		</transition>
+	</form>
+
+	<script src="http://192.168.1.102:35729/livereload.js?ext=Chrome&amp;extver=2.1.0"></script>
+
+	<script src="../static/js/watcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+.content{
+	margin: 140px 10px 0px;
+	text-align: center;
+	width: auto;
+}
+
+.content h3{
+	font-size: 20px;
+	font-weight: normal;
+	color: #171717;
+	margin-bottom: 16px;
+}
+
+.content .input{
+	width: 280px;
+	text-align: center;
+	height: 40px;
+	border-radius: 21px;
+	border: 1px solid #171717;
+	margin: 10px;
+	font-size: 16px;
+	padding: 0px 10px;
+}
+
+.content .submit{
+	width: 302px;
+	height: 42px;
+	border: none;
+	background-color: #338bb6;
+	color: white;
+}
+
+.content .radio{
+	text-align: center;
+	margin-top: 10px;
+}
+
+.content .radio input{
+	position: relative;
+	top: 2px;
+}

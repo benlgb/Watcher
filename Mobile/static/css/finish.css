@@ -1,0 +1,23 @@
+.finish{
+	width: 100px;
+	margin: 100px auto 16px;
+}
+
+.info{
+	text-align: center;
+	color: #646464;
+	line-height: 24px;
+	font-size: 17px;
+}
+
+.submit{
+	display: block;
+	height: 50px;
+	text-align: center;
+	background-color: #60bbe7;
+	line-height: 50px;
+	color: white;
+	border-radius: 6px;
+	font-size: 18px;
+	margin: 25px 15px 0px;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=0, maximum-scale=1.0"/>
+	<title>守望者</title>
+	<link rel="stylesheet" href="../static/css/tabs.css">
+	<link rel="stylesheet" href="../static/css/watcher_test.css">
+	<script src="../static/js/vue.js"></script>
+	<script src="../static/js/jquery-3.1.1.js"></script>
+</head>
+<body>
+	<div class="tabs">
+		<div class="tab self"><a href="index.html">自我成长</a></div>
+		<div class="tab watcher on"><a href="watcher.html">守望者</a></div>
+		<div class="tab phone"><a href="phone.html">心灵的港湾</a></div>
+		<div class="tab me"><a href="me.html">我的</a></div>
+	</div>
+
+	<div class="content" id="content">
+		<div class="header">
+			<div class="back">
+				<img src="../static/img/back.png" alt="">
+			</div>
+			<h1>请完成以下板块</h1>
+		</div>
+		<div class="plates" v-cloak>
+			<div class="plate" v-bind:class="{on: data.select[n-1].finish}" v-on:click="showTest(n-1)" v-for="n in 9">
+				<img v-bind:src="'../static/img/plate' + n + '.png'">
+			</div>
+			<div class="plate on">完成</div>
+		</div>
+
+		<transition name="alert">
+			<div class="alert" v-if="show" v-cloak>
+				<div class="mask"></div>
+				<div class="alert-box">
+					<i class="close" v-on:click="show = false"></i>
+					<h3>{{ question_index + 1 }}.{{ question.title }}</h3>
+					<div class="description">
+						<p><img src="../static/img/testPic.jpg" alt=""></p>
+					</div>
+					<div class="function">
+						<div class="page">
+							<span v-on:click="previous">上一页</span>
+							<span>{{ question_index + 1 }}/{{ test.quiz.length }}</span>
+							<span v-on:click="next">下一页</span>
+						</div>
+						<div class="answer">
+							<span v-bind:class="{ on: answer == 0 }" v-on:click="setAnswer(0)">未发现</span>
+							<span v-bind:class="{ on: answer == 1 }" v-on:click="setAnswer(1)">有</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</transition>
+	</div>
+
+	<script src="../static/js/watcher_test.js"></script>
+</body>
+</html>
