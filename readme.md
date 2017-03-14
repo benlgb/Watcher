@@ -366,11 +366,11 @@
 {
       "status": 1, // 获取成功
       "unhandledGroupNote": [{
-            "id": "1",
+            "student_id": "1",
             "name": "姓名",
             "avatar": "头像地址"
       }, {
-            “id”: "2",
+            “student_id”: "2",
             "name": "姓名",
             "avatar": "头像地址"
       }, ]
@@ -668,31 +668,40 @@
     - -1: 修改失败
 
 ##### 5. 修改头像 #####
-- 请求地址：`/Index/changeAvatar`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "avatar": "头像" // formdata传值，图片文件
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"changeAvatar"|
+|avatar|FILE|true|formData类型传值|
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 修改成功
+	  "avatar": "新头像地址"
 }
 ```
+
 - 备注：
+- 请在前端限制大小最大为5M
 - 返回参数status：
     - 1: 修改成功
     - -1: 修改失败
 
 ##### 6. 获取所有通知 #####
-- 请求地址：`/notice`
+- 请求地址：`/Index/note`
 - 请求方法：`POST`
-- 请求参数：无
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"getNote"|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       "notices": [{
@@ -703,7 +712,7 @@
             "content": "辅导员已经将您拉入关大饼的守望对象用户组啦，快去帮您的守护对象进行测评吧",
             "time": "2017.02.21 18:30",
             "watcheder": { // 被守望者信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
@@ -712,14 +721,14 @@
                   "avatar": "头像地址"
             }
       }, {
-            "id": "2",
+            "student_id": "2",
             "type": 2, // 通知类型（用户被踢出守望小组）
             "read": true, // 是否已被读
             "title": "辅导员把您踢出郭小洁的守望小组",
             "content": "辅导员已经将您踢出关大饼的守望对象用户组，感谢您对守望者工作的支持与鼓励",
             "time": "2017.02.21 18:30"
       }, {
-            "id": "3",
+            "student_id": "3",
             "type": 3, // 通知类型（向辅导员和上级发出预警信号）
             "read": false, // 是否已被读
             "title": "关大饼同学被评为二级预警",
@@ -727,7 +736,7 @@
             "warning": 4, // 最终预警信号
             "time": "2017.02.21 18:30",
             "watcheder": { // 预警同学信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
@@ -739,21 +748,23 @@
 }
 ```
 - 备注：
+- type通知类型：1（用户被拉入守望小组），2（用户被踢出守望小组），3（向辅导员和上级发出预警信号）
 - 返回参数status：
     - 1: 修改成功
     - -1: 修改失败
 
 ##### 7. 通知上级 #####
-- 请求地址：`/informSuperior`
+- 请求地址：`/Index/warn
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "noticeId": "1" // 通知id
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"informSup"|
+|noticeId|int|true|通知id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 通知成功
 }
@@ -761,21 +772,22 @@
 - 备注：
 - 返回参数status：
     - 1: 通知成功
-    - -1: 通知失败
+    - -1: 通知失败(不是没有)
 
 ##### 8. 修改评级 #####
-- 请求地址：`/modifyWarning`
+- 请求地址：`/Index/warn`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "noticeId": "1", // 通知id
-      "warning": 1, // 修改的评级
-      "remark": "备注"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"changeLevel"|
+|noticeId|int|true|通知ID|
+|warning|int|true|新评级|
+|remark|string|false|备注|
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 修改成功
 }
@@ -783,15 +795,20 @@
 - 备注：
 - 返回参数status：
     - 1: 修改成功
-    - -1: 修改失败
+    - -1: 修改失败(不是没有)
 
 ## 七、守望者小组 ##
 ##### 1. 获取当前用户建立的守望者小组 #####
-- 请求地址：`/watcherGroups`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
-- 请求参数：无
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"getGroup"|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       "watcherGroups": [{
@@ -799,7 +816,7 @@
             "watchersCount": 11,
             "finishedCount": 9,
             "watcheder": { // 被守望者信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
@@ -813,14 +830,19 @@
 - 备注：
 - 返回参数status：
     - 1: 获取成功
-    - -1: 获取失败
+    - -1: 获取失败(不是没有)
 
 ##### 2. 获取学院专业班级信息 #####
-- 请求地址：`/department`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
-- 请求参数：无
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"getMajor"|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       "school": [{
@@ -841,19 +863,20 @@
 - 备注：
 - 返回参数status：
     - 1: 获取成功
-    - -1: 获取失败
+    - -1: 获取失败(不是没有)
 
 ##### 3. 守望者小组基本信息 #####
-- 请求地址：`/watcherGroup`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
 - 请求参数：
-  '''
-  {
-      "id": "1" // 守望小组id
-  }
-  '''
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须是"getInfo"|
+|id|int|true|小组id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       "watcherGroup": {
@@ -861,7 +884,7 @@
             "watchersCount": 11,
             "finishedCount": 9,
             "watcheder": { // 被守望者个人信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
@@ -870,16 +893,17 @@
                   "avatar": "头像地址"
             },
             "watchers": [{ // 守望者个人信息
-                  "id": "1",
+                  "student_id": "1",
                   "type": "0",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
                   "class": "班级",
                   "phone": "手机号",
-                  "avatar": "头像地址"
+                  "avatar": "头像地址",
+				  "result":"这个人相当有问题"
             }, {
-                  "id": "2",
+                  "student_id": "2",
                   "type": "1"
                   "name": "姓名",
                   "phone": "手机号",
@@ -887,42 +911,27 @@
             }],
             "warnings": [0, 4, 2, 3, 1],
             "warning": 4,
-            "warcherInfo": [{
-                  "id": "1",
-                  "warning": 1,
-                  "finishTime": "2017.01.13 15:20",
-                  "result": "他评结果",
-                  "watcher": {
-                        "id": "1",
-                        "type": "0",
-                        "name": "姓名",
-                        "school": "学院",
-                        "major": "专业",
-                        "class": "班级",
-                        "phone": "手机号",
-                        "avatar": "头像地址"
-                  }
-            }]
       }
 }
 ```
 - 备注：
 - 返回参数status：
     - 1: 获取成功
-    - -1: 获取失败
+    - -1: 获取失败(不是没有)
 
 ##### 4. 创建守望者小组 #####
-- 请求地址：`/createWatcherGroup`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
 - 请求参数：
-  '''
-  {
-      "watchederId": "1", // 被守望者id
-      "watcherIds": ["2", "3"] // 守望者id
-  }
-  '''
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"createGroup"|
+|watchederId|int|true|被守望者id|
+|watcherIds|array|true|守望者Id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 创建成功
       "watcherGroup": {
@@ -930,52 +939,36 @@
             "watchersCount": 11,
             "finishedCount": 9,
             "watcheder": { // 被守望者个人信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
                   "class": "班级",
                   "phone": "手机号",
                   "avatar": "头像地址"
-            },
-            "watchers": [{ // 守望者个人信息
-                  "id": "1",
-                  "type": "0",
-                  "name": "姓名",
-                  "school": "学院",
-                  "major": "专业",
-                  "class": "班级",
-                  "phone": "手机号",
-                  "avatar": "头像地址"
-            }, {
-                  "id": "2",
-                  "type": "1"
-                  "name": "姓名",
-                  "phone": "手机号",
-                  "avatar": "头像地址"
-            }],
-            "warnings": [0, 0, 0, 0, 0],
-            "warning": 0
+            }
       }
 }
 ```
 - 备注：
+- DEMO里面创建成功是直接返回很多个守望小组的页面，所以不用返回守望者信息
 - 返回参数status：
     - 1: 创建成功
-    - -1: 创建失败
+    - -1: 创建失败（不是没有）
 
 ##### 5. 添加守望者成员 #####
-- 请求地址：`/addWatcher`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
 - 请求参数：
-  '''
-  {
-      "id": "1", // 守望小组id
-      "watcherIds": ["2", "3"] // 守望者id
-  }
-  '''
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"addMember"|
+|id|int|true|守望小组id|
+|watcherIds|array|true|守望者id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 添加成功
       "watcherGroup": {
@@ -999,32 +992,18 @@
                   "major": "专业",
                   "class": "班级",
                   "phone": "手机号",
-                  "avatar": "头像地址"
+                  "avatar": "头像地址",
+				  "result":"这个人有问题"
             }, {
                   "id": "2",
                   "type": "1"
                   "name": "姓名",
                   "phone": "手机号",
-                  "avatar": "头像地址"
+                  "avatar": "头像地址",
+				  "result":NULL
             }],
             "warnings": [0, 4, 2, 3, 1],
-            "warning": 4,
-            "warcherInfo": [{
-                  "id": "1",
-                  "warning": 1,
-                  "finishTime": "2017.01.13 15:20",
-                  "result": "他评结果",
-                  "watcher": {
-                        "id": "1",
-                        "type": "0",
-                        "name": "姓名",
-                        "school": "学院",
-                        "major": "专业",
-                        "class": "班级",
-                        "phone": "手机号",
-                        "avatar": "头像地址"
-                  }
-            }]
+            "warning": 4
       }
 }
 ```
@@ -1034,17 +1013,18 @@
     - -1: 添加失败
 
 ##### 6. 删除守望者成员 #####
-- 请求地址：`/deleteWatcher`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
 - 请求参数：
-  '''
-  {
-      "id": "1", // 守望小组id
-      "watcherIds": ["2", "3"] // 被删除的守望者id
-  }
-  '''
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"delMember"|
+|id|int|true|守望小组id|
+|watcherIds|array|true|被删除的守望者id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 删除成功
       "watcherGroup": {
@@ -1052,7 +1032,7 @@
             "watchersCount": 11,
             "finishedCount": 9,
             "watcheder": { // 被守望者个人信息
-                  "id": "1",
+                  "student_id": "1",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
@@ -1061,39 +1041,25 @@
                   "avatar": "头像地址"
             },
             "watchers": [{ // 守望者个人信息
-                  "id": "1",
+                  "student_id": "1",
                   "type": "0",
                   "name": "姓名",
                   "school": "学院",
                   "major": "专业",
                   "class": "班级",
                   "phone": "手机号",
-                  "avatar": "头像地址"
+                  "avatar": "头像地址",
+				  "result":"这个人有问题"
             }, {
-                  "id": "2",
+                  "student_id": "2",
                   "type": "1"
                   "name": "姓名",
                   "phone": "手机号",
-                  "avatar": "头像地址"
+                  "avatar": "头像地址",
+				  "result":NULL
             }],
             "warnings": [0, 4, 2, 3, 1],
-            "warning": 4,
-            "warcherInfo": [{
-                  "id": "1",
-                  "warning": 1,
-                  "finishTime": "2017.01.13 15:20",
-                  "result": "他评结果",
-                  "watcher": {
-                        "id": "1",
-                        "type": "0",
-                        "name": "姓名",
-                        "school": "学院",
-                        "major": "专业",
-                        "class": "班级",
-                        "phone": "手机号",
-                        "avatar": "头像地址"
-                  }
-            }]
+            "warning": 4
       }
 }
 ```
@@ -1103,16 +1069,17 @@
     - -1: 删除失败
 
 ##### 7. 解散守望小组 #####
-- 请求地址：`/deleteWatcherGroup`
+- 请求地址：`/Index/group`
 - 请求方法：`POST`
 - 请求参数：
-  '''
-  {
-      "id": "1" // 守望小组id
-  }
-  '''
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"delGroup"|
+|id|int|true|守望小组id|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 删除成功
 }
@@ -1120,4 +1087,4 @@
 - 备注：
 - 返回参数status：
     - 1: 删除成功
-    - -1: 删除失败
+    - -1: 删除失败（不是没有）
