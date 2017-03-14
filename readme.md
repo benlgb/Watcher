@@ -3,16 +3,18 @@
 - [一、重点备注](#一重点备注)
   - [1. 预警通知](#1-预警通知)
   - [2. 登录注册方式](#2-登录注册方式)
+  - [3. 用户身份标识](#3-用户身份标识)
 - [二、登录注册](#二登录注册)
   - [1. 登录接口](#1-登录接口)
   - [2. 注册接口](#2-注册接口)
-  - [3. 验证码](#3-验证码)
+  - [3. 发送验证码](#3-发送验证码)
+  - [4. 验证验证码](#4-验证验证码)
 - [三、自我成长](#三自我成长)
   - [1. 首页信息](#1-首页信息)
   - [2. 搜索测试](#2-搜索测试)
   - [3. 自评测试信息](#3-自评测试信息)
   - [4. 提交自评测试答案](#4-提交自评测试答案)
-  - [5. 获取首次守望者小组未显示过的任务](#4-提交自评测试答案)
+  - [5. 获取尚未处理的通知](#5-获取尚未处理的通知)
 - [四、守望者](#四守望者)
   - [1. 查询学生](#1-查询学生)
   - [2. 获取他评问题](#2-获取他评问题)
@@ -54,40 +56,42 @@
 |教师、家属、医生和其他教职工|通过手机号和密码登录，通过姓名、手机号、密码和验证码注册|
 
 ##### 3.用户身份标识 #####
-|用户类型|标识码|
-|----|-----|
-|学生|0|
-|教师|1|
-|家属|2|
-|医生|3|
-|辅导员|4|
-|中心咨询师|5|
-|书记|6|
-|其他教职工|7|
-|领导|8|
-|超级管理员|9|
+|用户类型|标识码|备注|
+|----|-----|----|
+|学生|0|NULL|
+|教师|1|拥有工号|
+|家属|2|NULL|
+|医生|3|他评选择题可以选填|
+|辅导员|4|拥有查看/创建/删除/更改守望小组，查看数据可视化，通知上级，修改预警等级的权限|
+|中心咨询师|5|拥有通知上级，修改预警等级，查看数据可视化的权限|
+|书记|6|拥有查看数据可视化的权限|
+|其他教职工|7|NULL|
+|领导|8|只拥有查看数据可视化的权限|
+|超级管理员|9|全局权限|
 
 `此标识码全局通用`
 
 ## 二、登录注册 ##
 ##### 1. 登录接口 #####
-- 请求地址：`/Index/login`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
 
-|参数名|类型|必选|
-|---|---|---|---|
-|type|int|true|
-|account|string|true|
-|pass|string|true|
+|参数名|类型|必选|备注|
+|---|---|---|---|---|
+|action|string|true|必须为"login"|
+|type|int|true|[身份标识码](#3-用户身份标识)|
+|sid|string|false|学生学号|
+|account|string|true|用户名／学生名称|
+|pass|string|true|密码|
 
 
 
 ```json
 {
+      "type": "0" // 学生
       "username": "用户名",
       "password": "密码",
-      "type": "1" // 辅导员（管理员）
 }
 ```
 - 返回数据：
@@ -97,35 +101,28 @@
 }
 ```
 - 备注：
-- 请求参数type：（按照功能不同区分，学生和其他的参数不同）
-    - 0: 学生（其他参数为`username(string)` `studentId(string)` `password(string)`）
-    - 1: 辅导员
-    - 2: 学校书记
-    - 3: 中心咨询师
-    - 4: 领导
-    - 5: 超级管理员
-    - 6: 其他（教师、家属、医生、其他教职工）
-      （其他参数为`phone(string)` `password(string)`）  
-- 返回参数status：
+返回参数status：
     - 1: 登录正常
     - -1: 密码错误
     - -2: 不在认证微信登录
     - -3: 参数错误
 
 ##### 2. 注册接口 #####
-- 请求地址：`/register`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "name": "姓名",
-      "phone": "手机号",
-      "password": "密码",
-      “verity”: "验证码"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|"必须为register"|
+|type|int|true|[身份标识码](#3-用户身份标识)|
+|name|string|true|姓名|
+|school_id|string|false|工号（教师必选）|
+|phone|string|true|手机|
+
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 注册正常
 }
@@ -135,78 +132,94 @@
 - 返回参数status：
     - 1: 注册正常
     - -1: 手机号已被注册
-    - -2: 验证码错误
-    - -3: 不在认证微信注册
-    - -4: 参数错误
+    - -2: 参数错误
 
-##### 3. 验证码 #####
-- 请求地址：`/verify`
+##### 3. 发送验证码 #####
+- 请求地址：`/Index/sendAuthCode`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "phone": "手机号"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|phone|string|true|手机号|
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 短信发送成功
 }
 ```
 - 备注：
+手机格式与过频访问请在前端控制（恶意请求在后台另有限制）
 - 返回参数status：
     - 1: 短信发送成功
-    - -1: 手机号错误
-    - -2: 短信发送失败
-    - -3: 过频访问（对于一个微信号而言离上一次请求小于60s）
-       （返回其他参数`timeRemaining(int)`（距离下次请求的剩余时间））
+    - -1: 短信发送失败
+
+##### 4.验证验证码 #####
+- 请求地址: `/Index/verify`
+- 请求方法: `POST`
+- 请求参数:
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|authCode|string|true|验证码|
+
+- 返回数据：
+```json
+{
+	"status":1 //验证码正确
+}
+```
+- 备注
+- 返回参数status：
+ - 1:验证码正确
+ - 2:验证码错误
 
 ## 三、自我成长 ##
-#####1. 首页信息#####
+##### 1. 首页信息 #####
 - 请求地址：`/Index/getMainPage`
 - 请求方法：`GET`
 - 请求参数：无
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       “banner”: [{
-            "id": "1",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "1",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }, {
-            "id": "2",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "2",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_pes": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }],
       "selected": [{
-            "id": "3",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "3",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }, {
-            "id": "4",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "4",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }, {
-            "id": "5",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "5",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }]
 }
 ```
@@ -217,16 +230,17 @@
     - -1: 获取失败（不是没有）
 
 ##### 2. 搜索测试 #####
-- 请求地址：`/Index/search`
-- 请求方法：`GET`
+- 请求地址：`/Index/selfTest`
+- 请求方法：`POST`
 - 请求参数：
-```
-{
-      "keyword": "搜索关键词"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"search"|
+|keyword|string|true|关键字|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 搜索成功
       “tests”: [{
@@ -253,24 +267,26 @@
     - -1: 搜索失败（不是没有）
 
 ##### 3. 自评测试信息 #####
-- 请求地址：`/Index/getTest`
+- 请求地址：`/Index/selfTest`
 - 请求方法：`GET`
 - 请求参数：
-```
-{
-      "testId": "1"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|aciton|string|true|必须为"getTest"|
+|testId|int|true|测试Id(注意参数名称大小写)|
+|detail|boolean|false|是否获取题目详细,后台默认不获取|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
-      "id": "1",
-      "testName": "正性负性情绪量表(PANAS)",
-      "testPic": "./PUBLIC/quiz/1/cover.png",
-      "shortDes": "这是场积极情绪和消极情绪的较量。",
+      "test_id": "1",
+      "test_name": "正性负性情绪量表(PANAS)",
+      "test_pic": "./PUBLIC/quiz/1/cover.png",
+      "short_des": "这是场积极情绪和消极情绪的较量。",
       "desciption": "情绪在心理学研究中占据重要地位，研究者经常把情绪作为......",
-      "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+      "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       “detail”: [{
             "id": "1",
             "question": "感兴趣的",
@@ -301,51 +317,56 @@
     - -1: 获取失败（不是没有）
 
 ##### 4. 提交自评测试答案 #####
-- 请求地址：`/SelfScore/submit`
+- 请求地址：`/Index/selfTest`
 - 请求方法：`POST`
 - 请求参数：
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"submit"|
+|testId|int|true|测试id|
+|answers|array|true|答案,格式如下json|
+
+```json
 {
       "testId": "1",
       "answers": [{
             "id": "1",
-            "question": "感兴趣的",
             "answer": 0 // 答案的index
       }, {
             "id": "2",
-            "question": "心烦的",
             "answer": 4 // 答案的index
       }]
 }
 ```
+
 - 返回数据：
-```
+```json
 {
-      "status": 1, // 获取成功
-      "id": "1",
-      "testName": "正性负性情绪量表(PANAS)",
-      "testPic": "./PUBLIC/quiz/1/cover.png",
-      "shortDes": "这是场积极情绪和消极情绪的较量。",
-      "desciption": "情绪在心理学研究中占据重要地位，研究者经常把情绪作为......",
-      “result”: “个体精力旺盛，能全神贯注和快乐的情绪状况，镇定”
+      "status": 1 // 提交成功
 }
 ```
 - 备注：
 - 获取自评测试内容
 - 返回参数status：
-    - 1: 获取成功
-    - -1: 获取失败（不是没有）
+    - 1: 提交成功
+    - -1: 提交失败（不是没有）
 
-##### 5. 获取首次守望者小组未显示过的任务 #####
-- 请求地址：`/Index/unshowedWatcherGroups`
-- 请求方法：`GET`
-- 请求参数：无
+##### 5. 获取尚未处理的通知 #####
+- 请求地址：`/Index/note`
+- 请求方法：`POST`
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"getUnhandledGroupNote"|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
-      "unfinishWatcherGroups": [{
-            “id”: "1", // 
+      "unhandledGroupNote": [{
+            "id": "1",
             "name": "姓名",
             "avatar": "头像地址"
       }, {
@@ -356,30 +377,54 @@
 }
 ```
 - 备注：
-- 获取新的守望者小组的信息（未显示过的）
+- 获取尚未处理的守望小组通知
 - 返回参数status：
     - 1: 获取成功
     - -1: 获取失败（不是没有）
 
-## 四、守望者 ##
-##### 1. 查询用户 #####
-- 请求地址：`/Student/info`
-- 请求方法：`POST`
-- 请求参数：
-```
+##### 6.已读通知 #####
+- 请求地址: `/Index/note`
+- 请求方法: `POST`
+- 请求参数:
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"readNote"|
+|noteId|string|true|通知id|
+
+- 返回数据:
+```json
 {
-      “id”: "用户id",
-      "type": "0", // 用户类型
-      "sid": “学号”, // 用户为学生时
-      "name": “姓名”,
-      "school": “学院”, // 用户为学生时
-      "major": “专业”, // 用户为学生时
-      "class": “班级”, // 用户为学生时
-      "phone": “手机号”
+	"status" : 1 //提交成功
 }
 ```
-- 返回数据：
-```
+
+- 备注：
+- 返回参数status：
+	- 1:提交成功
+	- -1:提交失败（不是没有）
+
+## 四、守望者 ##
+##### 1. 查询用户 #####
+- 请求地址：`/Index/user
+- 请求方法：`POST`
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"searchUser"|
+|self|boolean|true|是否查询当前用户|
+|type|int|false|用户标识码|
+|college|string|false|学院|
+|major|string|false|专业|
+|class|string|false|班级|
+|studentId|string|false|学号|
+|schoolId|string|false|工号|
+|name|string|false|姓名|
+|phone|string|false|手机|
+
+- 返回数据(当self为false)：
+```json
 {
       "status": 1, // 查询成功
       “users”: [{
@@ -400,34 +445,39 @@
       }]
 }
 ```
-- 返回数据（无参数时）：
+- 返回数据(当self为true)：
 ```
 {
       "status": 1, // 查询成功
-      “person”: {
+      "users": [{
             "id": "1",
             "type": "1", // 用户类型（跟登录时一样）
             "name": "姓名",
             "phone": "手机号",
             "avatar": "头像地址",
-            "notice": true, // 是否有新的通知
-      }
+            "notice_num": 2, // ** 新 ** 通知数量
+      }]
 }
 ```
 - 备注：
 - 查询用户基本信息（没有的信息用空字符串代替）
-- 查询条件没有时返回当前用户信息
-- 查询条件有可能为列表
+- self为true时返回当前用户信息
+- self为false时name,type参数为必选参数
 - 返回参数status：
     - 1: 查询成功
     - -1: 查询失败（不是没有）
 
 ##### 2. 获取他评问题 #####
-- 请求地址：`/OtherScore/getTest`
-- 请求方法：`GET`
-- 请求参数：无
+- 请求地址：`/Index/otherTest`
+- 请求方法：`POST`
+- 请求参数：
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"getTest"|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       “select”: [{
@@ -453,7 +503,7 @@
                   "pic": "题目图片"
             }]
       }],
-      "mark": "主观题备注"
+      "mark": "主观题备注"//不同用户返回不同
 }
 ```
 - 备注：
@@ -463,12 +513,18 @@
     - -1: 获取失败（不是没有）
 
 ##### 3. 提交他评答案 #####
-- 请求地址：`/OtherScore/submit`
-- 请求方法：`GET`
+- 请求地址：`/Index/otherTest`
+- 请求方法：`POST`
 - 请求参数：
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"submit"|
+|select|array|true|选择题答案json格式如下|
+|mark|string|true|主观题答案|
+
+```json
 {
-      "studentId": “评价对象id”,
       “select”: [{
             "id": "1",
             "answers": [{
@@ -491,8 +547,9 @@
       "mark": "主观题"
 }
 ```
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 提交成功
 }
@@ -508,32 +565,33 @@
 
 ## 六、我的 ##
 ##### 1. 获取我的测试 #####
-- 请求地址：`/myTest`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "limit": 2 // 限制个数
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"selfTest"|
+|limit|int|false|获取数量,默认获取全部|
+
 - 返回数据：
-```
+```json
 {
       "status": 1, // 获取成功
       “tests”: [{
-            "id": "1",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "1",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }, {
-            "id": "2",
-            "testName": "正性负性情绪量表(PANAS)",
-            "testPic": "../static/img/banner.png",
-            "shortDes": "这是场积极情绪和消极情绪的较量。",
+            "test_id": "2",
+            "test_name": "正性负性情绪量表(PANAS)",
+            "test_pic": "../static/img/banner.png",
+            "short_des": "这是场积极情绪和消极情绪的较量。",
             "description": "请仔细阅读每一道题并根据自己实际情况进行作答：......",
-            "quizWarn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
+            "quiz_warn": "请仔细阅读每一道题并根据自己实际情况进行作答：每一......"
       }]
 }
 ```
@@ -544,14 +602,15 @@
     - -1: 获取失败（不是没有）。
 
 ##### 2. 修改名字 #####
-- 请求地址：`/Index/changeName`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "name": "新名字"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"changeName"|
+|name|string|true|新名字|
+
 - 返回数据：
 ```
 {
@@ -559,41 +618,44 @@
 }
 ```
 - 备注：
+- 此接口只供除学生，//TODO 之外的人员使用
 - 返回参数status：
     - 1: 修改成功
-    - -1: 修改失败
+    - -1: 修改失败(不是没有)
 
 ##### 3. 修改手机号 #####
-- 请求地址：`/Index/changePhone`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "phone": "新手机号",
-      "verify": "验证码"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"changePhone|"
+|phone|string|true|新手机号|
+
 - 返回数据：
-```
+```json
 {
       "status": 1 // 修改成功
 }
 ```
 - 备注：
+- 验证码请在前端控制验证
 - 返回参数status：
     - 1: 修改成功
     - -1: 修改失败
 
 ##### 4. 修改密码 #####
-- 请求地址：`/Index/changePassword`
+- 请求地址：`/Index/user`
 - 请求方法：`POST`
 - 请求参数：
-```
-{
-      "oldPassword": "旧密码",
-      "newPassword": "新密码"
-}
-```
+
+|参数名|类型|必选|备注|
+|---|---|---|---|
+|action|string|true|必须为"changePass"|
+|oldPass|string|true|旧密码|
+|newPass|string|true|新密码|
+
 - 返回数据：
 ```
 {
