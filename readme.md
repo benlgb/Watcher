@@ -119,6 +119,7 @@
 |type|int|true|[身份标识码](#3-用户身份标识)|
 |name|string|true|姓名|
 |school_id|string|false|工号（教师必选）|
+|pass|string|true|密码|
 |phone|string|true|手机|
 
 
