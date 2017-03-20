@@ -522,8 +522,10 @@
 |参数名|类型|必选|备注|
 |---|---|---|---|
 |action|string|true|必须为"submit"|
+|to_whom|int|true|被评价的学生id|
 |select|array|true|选择题答案json格式如下|
 |mark|string|true|主观题答案|
+
 
 ```json
 {
