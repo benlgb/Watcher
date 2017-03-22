@@ -6,8 +6,6 @@
 	<title>守望者</title>
 	<link rel="stylesheet" href="../static/css/tabs.css">
 	<link rel="stylesheet" href="../static/css/index.css">
-	<script src="../static/js/vue.js"></script>
-	<script src="../static/js/jquery-3.1.1.js"></script>
 </head>
 <body>
 	<div class="tabs">
@@ -18,50 +16,55 @@
 	</div>
 
 	<div class="content" id="content">
-		<form class="search" action="search.html" method="get" v-on:submit="query">
+		<form class="search" action="search.html" method="get">
 			<input type="submit" class="search-button" value="搜索">
 			<input type="search" class="search-text" id="search-text" name="q" placeholder="搜索测试（输入关键词）">
+			<div class="block"></div>
 		</form>
-		<div class="banner" v-cloak v-on:click="alert = banner[bannerSelected]">
-			<div class="banner-picture" v-bind:style="{ width: bannerWidth, right: right + '%', left: left }">
-				<img v-bind:src="test.testPic" v-for="test in indexData.banner" v-bind:style="{ width: bannerPicWidth }">
+		<div class="banner" v-cloak @click="show(banner[bannerIndex])">
+			<div class="banner-picture" :style="{width: bannerWidth, right: bannerRight}">
+				<div class="box" v-for="test in banner" :style="{width: slideWidth}">
+					<img :src="test.test_pic">
+					<span class="banner-title" v-text="test.test_name"></span>
+				</div>
 			</div>
 			<div class="black"></div>
 			<div class="slide">
-				<i v-bind:class="{ on: bannerSelected == index }" v-for="(test, index) in banner"></i>
+				<i v-for="(test, index) in banner" :class="{on: index == bannerIndex}"></i>
 			</div>
 		</div>
 		<div class="recommend" v-cloak>
 			<h2><b>·</b> 精选测试 <b>·</b></h2>
 			<ul>
-				<li class="text" v-for="test in indexData.selected" v-on:click="alert = test">
-					<img v-bind:src="test.testPic" alt="">
-					<h3>{{ test.testName }}</h3>
-					<p class="description">{{ test.description }}</p>
+				<li class="text" v-for="test in selected" @click="show(test)">
+					<img :src="test.test_pic">
+					<h3 v-text="test.test_name"></h3>
+					<p class="description" v-text="test.short_des"></p>
 				</li>
 			</ul>
 		</div>
 
 		<transition name="alert" v-cloak>
-			<div class="alert" v-if="alert">
+			<div class="alert" v-if="isShowInformation">
 				<div class="mask"></div>
 				<div class="alert-box">
-					<i class="close" v-on:click="alert = false"></i>
-					<h3>{{ alert.testName }}</h3>
+					<i class="close" @click="closeInformation"></i>
+					<h3 v-text="showTest.test_name"></h3>
 					<div class="description">
-						<img v-bind:src="alert.testPic" alt="">
+						<img :src="showTest.test_pic" alt="">
 						<p class="desc">简介：</p>
-						<p>{{ alert.description }}</p>
+						<p v-text="showTest.description"></p>
 					</div>
 					<div class="toTest">
-						<a v-bind:href="'self_test.html?id=' + alert.id">立即测试</a>
+						<a :href="testLink">立即测试</a>
 					</div>
 				</div>
 			</div>
 		</transition>
 	</div>
 	
-	<script src="http://192.168.1.102 :35729/livereload.js?ext=Chrome&amp;extver=2.1.0"></script>
+	<script src="../static/js/vue.min.js"></script>
+	<script src="../static/js/vue-resource.min.js"></script>
 	<script src="../static/js/index.js"></script>
 </body>
 </html>

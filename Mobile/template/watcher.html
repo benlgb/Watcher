@@ -6,8 +6,6 @@
 	<title>守望者</title>
 	<link rel="stylesheet" href="../static/css/tabs.css">
 	<link rel="stylesheet" href="../static/css/watcher.css">
-	<script src="../static/js/vue.js"></script>
-	<script src="../static/js/jquery-3.1.1.js"></script>
 </head>
 <body>
 	<div class="tabs">
@@ -17,10 +15,13 @@
 		<div class="tab me"><a href="me.html">我的</a></div>
 	</div>
 
-	<form class="content" action="watcher.html" method="get" v-on:submit.prevent="onSubmit">
+	<form class="content" id="content" 
+		action="watcher.html" method="get" 
+		@submit.prevent="submit">
 		<h3>请输入测评对象的信息</h3>
-		<p> 
-			<input class="input" id="name" v-model="name" type="text" name="name" placeholder="姓名" required>
+		<p>
+			<span>&nbsp;</span>
+			<input class="input" id="name" v-model="name" type="text" name="name" placeholder="姓名" required autocomplete="off" autofocus="autofocus">
 			<input class="submit input" type="submit" value="确定">
 		</p>
 
@@ -28,7 +29,7 @@
 			<div class="alert" v-if="alert" v-cloak>
 				<div class="mask"></div>
 				<div class="alert-box">
-					<i class="close" v-on:click="alert = false"></i>
+					<i class="close" @click="closeAlert"></i>
 					<h3>守望者合约</h3>
 					<div class="description">
 						<p>一、提示条款</p>
@@ -56,23 +57,22 @@
 						<p>六、温馨提示</p>
 						<p>自评量表测试结果仅供参考，不代表权威结果，如需进一步专业了解，请自行联系心理咨询中心或者就业指导中心。</p>
 						<p class="radio">
-							<input id="radio" type="radio" value="isSubmit" v-on:click="submit = true">
+							<input id="radio" type="radio" value="true" v-model="radio">
 							<label for="radio">
 								我已阅读并同意《守望者公约》
 							</label>
 						</p>
 					</div>
 					<div class="toTest">
-						<!-- <a href="">开始测试</a> -->
-						<input v-bind:class="{lock: !submit}" type="submit">
+						<input :class="{lock: !isAgree}" type="submit">
 					</div>
 				</div>
 			</div>
 		</transition>
 	</form>
 
-	<script src="http://192.168.1.102:35729/livereload.js?ext=Chrome&amp;extver=2.1.0"></script>
-
+	<script src="../static/js/vue.min.js"></script>
+	<script src="../static/js/vue-resource.min.js"></script>
 	<script src="../static/js/watcher.js"></script>
 </body>
 </html>

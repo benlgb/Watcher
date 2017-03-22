@@ -124,14 +124,12 @@ input::-webkit-search-cancel-button {
 	position: relative;
 	height: 40px;
 	text-align: center;
-	margin-top: 4px;
 	padding: 0px 30px;
-	margin-bottom: 5px;
 }
 
 .header .back{
 	position: absolute;
-	top: 8px;
+	top: 11px;
 	left: 12px;
 	width: 15px;
 	height: 22px;
@@ -140,13 +138,11 @@ input::-webkit-search-cancel-button {
 .header h1{
 	font-weight: normal;
 	font-size: 20px;
-	line-height: 38px;
+	line-height: 42px;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
 }
-
-
 
 .alert{
 	position: fixed;
@@ -155,6 +151,7 @@ input::-webkit-search-cancel-button {
 	width: 100%;
 	height: 100%;
 	transition: opacity 0.3s;
+	z-index: 3;
 }
 
 .alert.alert-enter,

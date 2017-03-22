@@ -6,8 +6,6 @@
 	<title>守望者</title>
 	<link rel="stylesheet" href="../static/css/tabs.css">
 	<link rel="stylesheet" href="../static/css/self_test.css">
-	<script src="../static/js/vue.js"></script>
-	<script src="../static/js/jquery-3.1.1.js"></script>
 </head>
 <body>
 	<div class="tabs">
@@ -24,28 +22,31 @@
 					<img src="../static/img/back.png" alt="">
 				</a>
 			</div>
-			<h1 v-cloak>{{ testName }}</h1>
+			<h1 v-cloak v-text="test_name"></h1>
 		</div>
 		<div class="questions" v-cloak>
-			<test-question v-bind:index="index" v-bind:question="question" v-for="(question, index) in detail"></test-question>
-			<div class="submit">提交</div>
+			<test-question :question="question" v-for="(question, index) in detail">
+				{{ index + 1 }}. {{ question.question }}
+			</test-question>
+			<div class="submit" @click="submit" v-if="status">提交</div>
 		</div>
 	</div>
 
 	<script type="text/x-template" id="question">
 		<div class="question">
-			<h2>{{ index + 1 }}.{{ question.question }}</h2>
+			<h2><slot></slot></h2>
 			<ul class="answers">
-				<test-answer v-bind:answer="answer" v-bind:question="question" v-bind:index="answer_index" v-for="(answer, answer_index) in question.answers"></test-answer>
+				<li v-for="(answer, index) in answers"
+					@click="chooseAnswer(index)"
+					:class="{on: on(index)}">
+					{{ answer }}
+				</li>
 			</ul>
 		</div>
 	</script>
 
-	<script type="text/x-template", id="answer">
-		<li v-bind:class="{ on: on }" v-on:click="select">{{ answer }}</li>
-	</script>
-
-	<script src="http://192.168.1.102:35729/livereload.js?ext=Chrome&amp;extver=2.1.0"></script>
+	<script src="../static/js/vue.min.js"></script>
+	<script src="../static/js/vue-resource.min.js"></script>
 	<script src="../static/js/self_test.js"></script>
 </body>
 </html>

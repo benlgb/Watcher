@@ -18,33 +18,39 @@
 	</div>
 
 	<div class="content" id="content">
-		<form class="search" action="search.html" method="get" v-on:submit.prevent="query">
+		<form class="search header searchPage" action="search.html" method="get">
+			<div class="back">
+				<a href="javascript: history.back();">
+					<img src="../static/img/back.png" alt="">
+				</a>
+			</div>
 			<input type="submit" class="search-button" value="搜索">
-			<input type="search" class="search-text" id="search-text" name="q" placeholder="搜索测试（输入关键词）" v-model="keyword">
+			<input type="search" class="search-text" id="search-text" name="q" placeholder="搜索测试（输入关键词）">
 		</form>
-		<div class="recommend" v-cloak v-if="search">
+		<div class="recommend" v-cloak>
+			<div class="block"></div>
 			<ul>
-				<li class="text" v-for="test in search" v-on:click="alert = test">
-					<img v-bind:src="test.testPic" alt="">
-					<h3>{{ test.testName }}</h3>
-					<p class="description">{{ test.description }}</p>
+				<li class="text" v-for="test in tests" @click="show(test)">
+					<img :src="test.test_pic">
+					<h3 v-text="test.test_name"></h3>
+					<p class="description" v-text="test.short_des"></p>
 				</li>
 			</ul>
 		</div>
 
 		<transition name="alert" v-cloak>
-			<div class="alert" v-if="alert">
+			<div class="alert" v-if="isShowInformation">
 				<div class="mask"></div>
 				<div class="alert-box">
-					<i class="close" v-on:click="alert = false"></i>
-					<h3>{{ alert.testName }}</h3>
+					<i class="close" @click="closeInformation"></i>
+					<h3 v-text="showTest.test_name"></h3>
 					<div class="description">
-						<img v-bind:src="alert.testPic" alt="">
+						<img :src="showTest.test_pic" alt="">
 						<p class="desc">简介：</p>
-						<p>{{ alert.description }}</p>
+						<p v-text="showTest.description"></p>
 					</div>
 					<div class="toTest">
-						<a v-bind:href="'self_test.html?id=' + alert.id">立即测试</a>
+						<a :href="testLink">立即测试</a>
 					</div>
 				</div>
 			</div>

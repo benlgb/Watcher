@@ -4,6 +4,10 @@
 	padding: 6px 12px;
 }
 
+.search.searchPage{
+	padding-left: 36px;
+}
+
 .search::before{
 	display: inline-block;
 	content: "";
@@ -14,6 +18,10 @@
 	background-size: 100% 100%;
 	top: 13px;
 	left: 20px;
+}
+
+.search.searchPage::before{
+	left: 44px;
 }
 
 .search .search-text{
@@ -47,12 +55,34 @@
 }
 
 .banner .banner-picture{
-	width: 400%;
+	width: 100%;
 	position: relative;
 	overflow: hidden;
 	right: 0%;
-	left: 0%;
 	transition: right 0.5s;
+	font-size: 0px;
+}
+
+.banner .box{
+	position: relative;
+	display: inline-block;
+	height: 100%;
+}
+
+.banner .box .banner-title{
+	position: absolute;
+	font-size: 18px;
+	z-index: 2;
+	color: white;
+	top: 50%;
+	left: 50%;
+	word-wrap: break-word;
+	width: 400px;
+	height: 40px;
+	line-height: 40px;
+	margin-top: -20px;
+	margin-left: -200px;
+	text-align: center;
 }
 
 .banner img{
@@ -93,6 +123,10 @@
 
 .recommend{
 	margin-top: -14px;
+}
+
+.block{
+	height: 5px;
 }
 
 .recommend h2{

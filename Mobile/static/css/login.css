@@ -1,4 +1,4 @@
-body, ul, p{
+body, ul, p, input{
 	padding: 0px;
 	margin: 0px;
 }
@@ -16,6 +16,10 @@ img{
 
 ul{
 	list-style: none;
+}
+
+[v-cloak] {
+  display: none !important;
 }
 
 .header .callback{
@@ -45,13 +49,14 @@ ul{
 	padding: 0px 15px;
 	border: 1px solid #dddddd;
 	border-radius: 20px;
-	/*height: 300px;
-	overflow: auto;*/
-}
-
-.header .identity .hidden{
 	height: 40px;
 	overflow: hidden;
+	outline: none;
+}
+
+.header .identity .show{
+	height: auto;
+	overflow: auto;
 }
 
 .header .hidden li:first-child::after{
@@ -100,8 +105,45 @@ ul{
 	width: 20px;
 	height: 20px;
 	position: absolute;
-	top: 18px;
+	top: 16px;
 	left: 20px;
+}
+
+.content .input .phone{
+	width: auto;
+	height: 24px;
+	top: 14px;
+	left: 22px;
+}
+
+.content .input .pass{
+	width: auto;
+	height: 22px;
+	top: 15px;
+	left: 21px;
+}
+
+.content .input.verify{
+	padding-right: 140px;
+}
+
+.content .input.verify a{
+	position: absolute;
+	top: 7px;
+	right: 20px;
+	display: block;
+	width: 100px;
+	height: 36px;
+	text-decoration: none;
+	color: white;
+	border-radius: 4px;
+	line-height: 36px;
+	text-align: center;
+	background-color: #60bbe7;
+}
+
+.content .input.verify .wait{
+	background-color: #d4d4d4;
 }
 
 .content .input input[type="text"],
@@ -117,17 +159,39 @@ ul{
 }
 
 .content .input-button{
-	padding: 25px 15px;
+	padding: 25px 15px 60px;
 }
 
-.content .input-button input{
+.content .input-button input,
+.content .input-button a
+{
+	display: inline-block;
 	width: 100%;
 	height: 45px;
+	line-height: 45px;
 	border: none;
 	outline: none;
 	font-size: 18px;
 	color: white;
 	font-family: "微软雅黑";
-	background-color: #81ccf1;
+	background-color: #60bbe7;
 	border-radius: 6px;
+	text-decoration: none;
+	text-align: center;
+}
+
+.content .register{
+	text-align: center;
+	font-size: 0px
+}
+
+.content .register input,
+.content .register a{
+	width: 48%;
+	font-size: 18px;
+}
+
+.content .register a{
+	margin-right: 2%;
+	background-color: #81ccf1;
 }
