@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=0, maximum-scale=1.0"/>
+	<title>守望者</title>
+	<link rel="stylesheet" href="../static/css/login.css">
+</head>
+<body>
+	<div class="main" id="main">
+		<div class="header">
+			<div class="callback" @click="back"><img src="../static/img/back.png"></div>
+			<div class="logo"><img src="../static/img/logo.png"></div>
+			<div class="identity">
+				<ul :class="{show: identity.isShow}" id="identity" @blur="toggleIdentity(false)" tabindex="-1">
+					<li @click="toggleIdentity" v-text="selected"></li>
+					<li v-for="(user, index) in identity.identities" v-text="user" @click="changeIdentity(index)"></li>
+				</ul>
+			</div>
+		</div>
+
+		<form class="content" action="/Index/user" method="post" v-if="mode == 0" @submit.prevent="submit">
+			<p class="input">
+				<img src="../static/img/icon-name.png">
+				<input type="text" name="account" placeholder="姓名">
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-workid.png">
+				<input type="text" name="account" placeholder="工号">
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-phone.png" class="phone">
+				<input type="number" name="phone" placeholder="手机号" v-model="phone1">
+			</p>
+			<p class="input verify">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="number" name="verify" placeholder="验证码">
+				<a :class="{wait: verify > 0}" href="javascript: void(0)" v-text="verifyText" @click="getVerify"></a>
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="password" name="pass" placeholder="密码">
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="password" name="repass" placeholder="确认密码">
+			</p>
+			<p class="input-button">
+				<input type="hidden" name="action" value="register">
+				<input type="hidden" name="type" :value="index">
+				<input type="submit" value="登录">
+			</p>
+		</form>
+
+		<form class="content" action="/Index/user" method="post" v-if="mode == 1" @submit.prevent="submit" v-cloak>
+			<p class="input">
+				<img src="../static/img/icon-name.png">
+				<input type="text" name="account" placeholder="姓名">
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-phone.png" class="phone">
+				<input type="number" name="phone" placeholder="手机号" v-model="phone2">
+			</p>
+			<p class="input verify">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="number" name="verify" placeholder="验证码">
+				<a :class="{wait: verify > 0}" href="javascript: void(0)" v-text="verifyText" @click="getVerify"></a>
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="password" name="pass" placeholder="密码">
+			</p>
+			<p class="input">
+				<img src="../static/img/icon-password.png" class="pass">
+				<input type="password" name="repass" placeholder="确认密码">
+			</p>
+			<p class="input-button">
+				<input type="hidden" name="action" value="register">
+				<input type="hidden" name="type" :value="index">
+				<input type="submit" value="登录">
+			</p>
+		</form>
+	</div>
+
+	<script src="../static/js/vue.min.js"></script>
+	<script src="../static/js/vue-resource.min.js"></script>
+	<script src="../static/js/register.js"></script>
+</body>
+</html>
